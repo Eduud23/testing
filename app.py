@@ -24,7 +24,6 @@ cred = credentials.Certificate(firebase_credentials)
 firebase_admin.initialize_app(cred, {
     'databaseURL': os.getenv('FIREBASE_DATABASE_URL')  # Fetch Firebase DB URL from environment
 })
-
 app = Flask(__name__)
 
 def jaccard_similarity(set1, set2):
