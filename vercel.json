@@ -5,6 +5,12 @@
         "src": "app.py",
         "use": "@vercel/python"
       }
+    ],
+    "routes": [
+      {
+        "src": "/recommendations/(.*)",
+        "dest": "/app.py"
+      }
     ]
   }
   
