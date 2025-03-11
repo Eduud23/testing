@@ -1,24 +1,28 @@
 import os
-import base64
 import json
-from io import BytesIO
 from flask import Flask, request, jsonify
 import firebase_admin
 from firebase_admin import credentials, db
 from collections import defaultdict
 
-# Decode the base64 string and load it as a Firebase credential
-encoded_credentials = os.getenv('FIREBASE_CREDENTIALS')
-if encoded_credentials:
-    decoded_credentials = base64.b64decode(encoded_credentials)
-    credentials_json = json.load(BytesIO(decoded_credentials))
-    cred = credentials.Certificate(credentials_json)
-else:
-    raise ValueError("Firebase credentials not set in environment variables.")
+# Fetch Firebase credentials from environment variables
+firebase_credentials = {
+    "type": os.getenv("FIREBASE_TYPE"),
+    "project_id": os.getenv("FIREBASE_PROJECT_ID"),
+    "private_key_id": os.getenv("FIREBASE_PRIVATE_KEY_ID"),
+    "private_key": os.getenv("FIREBASE_PRIVATE_KEY").replace('\\n', '\n'),  # Ensure \n is replaced with an actual newline
+    "client_email": os.getenv("FIREBASE_CLIENT_EMAIL"),
+    "client_id": os.getenv("FIREBASE_CLIENT_ID"),
+    "auth_uri": os.getenv("FIREBASE_AUTH_URI"),
+    "token_uri": os.getenv("FIREBASE_TOKEN_URI"),
+    "auth_provider_x509_cert_url": os.getenv("FIREBASE_AUTH_PROVIDER_X509_CERT_URL"),
+    "client_x509_cert_url": os.getenv("FIREBASE_CLIENT_X509_CERT_URL")
+}
 
-# Initialize Firebase
+# Initialize Firebase with the service account key
+cred = credentials.Certificate(firebase_credentials)
 firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://gearup-df833-default-rtdb.asia-southeast1.firebasedatabase.app/'
+    'databaseURL': os.getenv('FIREBASE_DATABASE_URL')  # Fetch Firebase DB URL from environment
 })
 
 app = Flask(__name__)
