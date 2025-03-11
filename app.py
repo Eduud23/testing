@@ -7,7 +7,7 @@ from collections import defaultdict
 
 # Fetch Firebase credentials from environment variables
 firebase_credentials = {
-    "type": os.getenv("FIREBASE_TYPE"),
+    "type": "service_account",
     "project_id": os.getenv("FIREBASE_PROJECT_ID"),
     "private_key_id": os.getenv("FIREBASE_PRIVATE_KEY_ID"),
     "private_key": os.getenv("FIREBASE_PRIVATE_KEY").replace('\\n', '\n'),  # Ensure \n is replaced with an actual newline
